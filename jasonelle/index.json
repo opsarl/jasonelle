@@ -24,7 +24,7 @@
         "scan": {
           "type": "$href",
           "options": {
-            "url": "file://qr.json"
+            "url": "https://raw.githubusercontent.com/opsarl/jasonelle/master/jasonelle/qr.json"
           },
           "error": {
             "type": "$reload"
@@ -285,7 +285,7 @@
                 }
               },
               "left": {
-                "image": "file://qr-code.png",
+                "image": "https://raw.githubusercontent.com/opsarl/jasonelle/master/jasonelle/qr.json",
                 "action": {
                   "trigger": "scan"
                 },
