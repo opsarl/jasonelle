@@ -285,7 +285,7 @@
                 }
               },
               "left": {
-                "image": "https://raw.githubusercontent.com/opsarl/jasonelle/master/jasonelle/qr.json",
+                "image": "file://qr-code.png",
                 "action": {
                   "trigger": "scan"
                 },
