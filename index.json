@@ -27,7 +27,7 @@
             "url": "file://qr.json"
           },
           "error": {
-              "type": "$reload"
+            "type": "$reload"
           },
           "success": {
             "type": "$set",
@@ -117,9 +117,7 @@
             "{{#else}}": {
               "type": "$cache.set",
               "options": {
-                "history": [
-
-                ]
+                "history": []
               },
               "success": {
                 "type": "$render"
@@ -142,21 +140,27 @@
           "font": "HelveticaNeue",
           "size": "20",
           "background": "#424242",
-          "color": "#eeeeee",
+          "color": "#eeeeee"
         }
       },
       "templates": {
         "body": {
           "header": {
-            "style": {"background": "#424242","color": "#eeeeee"},
+            "style": {
+              "background": "#424242",
+              "color": "#eeeeee"
+            },
             "title": "{·ᴥ·}",
             "menu": {
               "text": "Documentation",
-              "style": {"font": "HelveticaNeue","size": "16"},
+              "style": {
+                "font": "HelveticaNeue",
+                "size": "16"
+              },
               "href": {
                 "url": "https://jasonelle.com/docs",
                 "view": "web"
-              },
+              }
             }
           },
           "sections": [
@@ -261,9 +265,7 @@
                   }
                 },
                 {
-                  "{{#else}}": [
-
-                  ]
+                  "{{#else}}": []
                 }
               ]
             }
@@ -271,25 +273,25 @@
           "footer": {
             "input": {
               "style": {
-                "background": "#eeeeee",
+                "background": "#eeeeee"
               },
-              "textfield":{
+              "textfield": {
                 "name": "url",
                 "placeholder": "Enter a valid jason app url",
                 "style": {
                   "background": "#ffffff",
                   "color": "#333333",
-                  "color:placeholder": "#333333",
-                },
+                  "color:placeholder": "#333333"
+                }
               },
               "left": {
                 "image": "file://qr-code.png",
                 "action": {
                   "trigger": "scan"
+                },
+                "style": {
+                  "color": "#336699"
                 }
-                  "style": {
-                    "color": "#336699",
-                  },
               },
               "right": {
                 "text": "Go",
