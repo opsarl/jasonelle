@@ -1,0 +1,65 @@
+{
+  "$jason": {
+    "head": {
+      "title": "Barcode",
+      "actions": {
+        "qr": {
+          "type": "$set",
+          "options": {
+            "content": "Scanning..."
+          },
+          "success": {
+            "type": "$vision.scan",
+            "options": {
+              "type": "qrcode"
+            },
+            "success": {
+              "type": "$render"
+            }
+          }
+        },
+        "$vision.ready": {
+          "trigger": "qr"
+        },
+        "$load": {
+          "type": "$render"
+        },
+        "$vision.onscan": {
+          "type": "$ok",
+          "options": {
+            "content": "{{$jason.content}}"
+          }
+        }
+      },
+      "templates": {
+        "body": {
+          "style": {
+            "border": "none"
+          },
+          "background": {
+            "type": "camera",
+            "options": {
+              "device": "back"
+            }
+          },
+          "layers": [
+            {
+              "type": "label",
+              "text": "X",
+              "style": {
+                "font": "HelveticaNeue-Bold",
+                "size": "48"
+                "top": "30",
+                "right": "10"
+                "padding": "0"
+              },
+              "action":{
+                  "type": "$back",
+              }
+            }
+          ]
+        }
+      }
+    }
+  }
+}

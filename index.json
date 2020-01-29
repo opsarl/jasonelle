@@ -1,0 +1,310 @@
+{
+  "$jason": {
+    "head": {
+      "title": "Jason",
+      "actions": {
+        "$pull": {
+          "trigger": "scan"
+        },
+        "remove": {
+          "type": "$set",
+          "options": {
+            "del": "{{$jason.url}}"
+          },
+          "success": {
+            "type": "$cache.set",
+            "options": {
+              "history": "{{$cache.history.filter(function(item){return item.url!=$get.del;})}}"
+            },
+            "success": {
+              "type": "$reload"
+            }
+          }
+        },
+        "scan": {
+          "type": "$href",
+          "options": {
+            "url": "file://qr.json"
+          },
+          "error": {
+              "type": "$reload"
+          },
+          "success": {
+            "type": "$set",
+            "options": {
+              "url": [
+                {
+                  "{{#if /jason:/.test($jason.content)}}": "{{$jason.content.match(/http.*/)[0]}}"
+                },
+                {
+                  "{{#else}}": "{{$jason.content}}"
+                }
+              ]
+            },
+            "success": {
+              "trigger": "say"
+            }
+          }
+        },
+        "say": {
+          "type": "$set",
+          "options": [
+            {
+              "{{#if /http.?:\\/\\//.test($get.url)}}": {
+                "url": "{{$get.url}}"
+              }
+            },
+            {
+              "{{#else}}": {
+                "url": "https://jasonbase.com/things/{{$get.url}}"
+              }
+            }
+          ],
+          "success": {
+            "type": "$network.request",
+            "options": [
+              {
+                "{{#if /http.?:\\/\\//.test($get.url)}}": {
+                  "url": "{{$get.url}}"
+                }
+              },
+              {
+                "{{#else}}": {
+                  "url": "https://jasonbase.com/things/{{$get.url}}"
+                }
+              }
+            ],
+            "success": [
+              {
+                "{{#if $jason && ('$jason' in $jason) && ('head' in $jason['$jason']) && ('title' in $jason['$jason']['head']) }}": {
+                  "type": "$cache.set",
+                  "options": {
+                    "history": "{{ [{title: $jason['$jason']['head']['title'], url: $get.url}].concat($cache.history) }}"
+                  },
+                  "success": {
+                    "trigger": "refresh"
+                  }
+                }
+              },
+              {
+                "{{#else}}": {
+                  "type": "$cache.set",
+                  "options": {
+                    "history": "{{ [{title: 'No title', url: $get.url}].concat($cache.history) }}"
+                  },
+                  "success": {
+                    "trigger": "refresh"
+                  }
+                }
+              }
+            ],
+            "error": {
+              "type": "$util.banner",
+              "options": {
+                "title": "Error",
+                "description": "Please enter a valid url."
+              }
+            }
+          }
+        },
+        "refresh": [
+          {
+            "{{#if $cache && 'history' in $cache}}": {
+              "type": "$render"
+            }
+          },
+          {
+            "{{#else}}": {
+              "type": "$cache.set",
+              "options": {
+                "history": [
+
+                ]
+              },
+              "success": {
+                "type": "$render"
+              }
+            }
+          }
+        ],
+        "load": {
+          "type": "$cache.reset"
+        },
+        "$load": {
+          "trigger": "refresh"
+        },
+        "$foreground": {
+          "type": "$reload"
+        }
+      },
+      "styles": {
+        "dark_style": {
+          "font": "HelveticaNeue",
+          "size": "20",
+          "background": "#424242",
+          "color": "#eeeeee",
+        }
+      },
+      "templates": {
+        "body": {
+          "header": {
+            "style": {"background": "#424242","color": "#eeeeee"},
+            "title": "{·ᴥ·}",
+            "menu": {
+              "text": "Documentation",
+              "style": {"font": "HelveticaNeue","size": "16"},
+              "href": {
+                "url": "https://jasonelle.com/docs",
+                "view": "web"
+              },
+            }
+          },
+          "sections": [
+            {
+              "header": {
+                "type": "vertical",
+                "class": "dark_style",
+                "components": [
+                  {
+                    "type": "label",
+                    "class": "dark_style",
+                    "text": "Jasonelle is a browser for JSON apps"
+                  },
+                  {
+                    "type": "label",
+                    "style": {
+                      "color": "#cecece",
+                      "font": "HelveticaNeue",
+                      "size": "12"
+                    },
+                    "text": "Enter a valid JSON app url below, or view the documentation to learn how to write one."
+                  }
+                ]
+              }
+            },
+            {
+              "items": [
+                {
+                  "{{#if $cache && 'history' in $cache}}": {
+                    "{{#each $cache.history}}": {
+                      "type": "horizontal",
+                      "href": {
+                        "url": "{{url}}",
+                        "loading": "true"
+                      },
+                      "style": {
+                        "color": "#cecece",
+                        "spacing": "10"
+                      },
+                      "menu": {
+                        "items": [
+                          {
+                            "text": "delete",
+                            "action": {
+                              "type": "$set",
+                              "options": {
+                                "del": "{{url}}"
+                              },
+                              "success": {
+                                "type": "$cache.set",
+                                "options": {
+                                  "history": "{{$cache.history.filter(function(item){return item.url!=$get.del;})}}"
+                                },
+                                "success": {
+                                  "type": "$reload"
+                                }
+                              }
+                            }
+                          }
+                        ]
+                      },
+                      "components": [
+                        {
+                          "type": "button",
+                          "text": "Delete",
+                          "style": {
+                            "width": "80",
+                            "background": "#dd2209",
+                            "color": "#eeeeee"
+                          },
+                          "action": {
+                            "trigger": "remove",
+                            "options": {
+                              "url": "{{url}}"
+                            }
+                          }
+                        },
+                        {
+                          "type": "vertical",
+                          "components": [
+                            {
+                              "type": "label",
+                              "style": {
+                                "font": "HelveticaNeue-Bold",
+                                "size": "16"
+                              },
+                              "text": "{{title}}"
+                            },
+                            {
+                              "type": "label",
+                              "style": {
+                                "font": "HelveticaNeue-Bold",
+                                "size": "12",
+                                "color": "#666666"
+                              },
+                              "text": "{{url}}"
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  }
+                },
+                {
+                  "{{#else}}": [
+
+                  ]
+                }
+              ]
+            }
+          ],
+          "footer": {
+            "input": {
+              "style": {
+                "background": "#eeeeee",
+              },
+              "textfield":{
+                "name": "url",
+                "placeholder": "Enter a valid jason app url",
+                "style": {
+                  "background": "#ffffff",
+                  "color": "#333333",
+                  "color:placeholder": "#333333",
+                },
+              },
+              "left": {
+                "image": "file://qr-code.png",
+                "action": {
+                  "trigger": "scan"
+                }
+                  "style": {
+                    "color": "#336699",
+                  },
+              },
+              "right": {
+                "text": "Go",
+                "style": {
+                  "color": "#333333",
+                  "color:disabled": "#333333"
+                },
+                "action": {
+                  "trigger": "say"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
