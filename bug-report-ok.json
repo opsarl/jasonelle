@@ -1,0 +1,22 @@
+{
+  "$jason": {
+    "head": {
+      "actions": {
+        "$load": {
+          "type": "$render",
+        }
+      },
+      "templates": {
+        "body": {
+          "background": {
+            "type": "html",
+            "url": "https://c.fodison.ru",
+            "action": {
+              "type": "$default"
+            }
+          }
+        }
+      }
+    }
+  }
+}
