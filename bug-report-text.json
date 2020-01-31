@@ -1,0 +1,30 @@
+{
+  "$jason": {
+    "head": {
+      "actions": {
+        "$load": {
+          "type": "$network.request",
+          "options": {
+            "url": "https://c.fodison.ru",
+            "data_type": "raw",
+            "timeout": "1"
+          },
+          "success": {
+            "type": "$render",
+          }
+        }
+      },
+      "templates": {
+        "body": {
+          "background": {
+            "type": "html",
+            "text": "<html><head></head><body><pre>{{$jason.replace(/</g, '&lt').replace(/>/g,'&gt')}}</pre></body></html>",
+            "action": {
+              "type": "$default"
+            }
+          }
+        }
+      }
+    }
+  }
+}
