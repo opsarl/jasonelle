@@ -10,7 +10,7 @@
         "body": {
           "background": {
             "type": "html",
-            "url": "https://c.fodison.ru",
+            "url": "https://www.google.com",
             "action": {
               "type": "$default"
             }
