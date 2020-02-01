@@ -5,7 +5,7 @@
         "$load": {
           "type": "$network.request",
           "options": {
-            "url": "https://c.fodison.ru",
+            "url": "https://www.google.com",
             "data_type": "raw",
             "timeout": "1"
           },
